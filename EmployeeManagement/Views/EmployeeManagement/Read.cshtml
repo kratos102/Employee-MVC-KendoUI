@@ -1,0 +1,128 @@
+﻿<div id="grid"></div>
+
+<script>
+    $(document).ready(function () {
+        ds = new kendo.data.DataSource(
+            {
+                transport:
+                {
+                    read: {
+                        url: "/EmployeeManagement/Read",
+                        dataType: "json",
+                    },
+                    update: {
+                        url: "/EmployeeManagement/Update",
+                        dataType: "json",
+                        type: "post"
+                    },
+
+                    destroy: {
+                        url: "/EmployeeManagement/Delete",
+                        dataType: "json",
+                        type: "post"
+                    },
+
+                    create: {
+                        url: "/EmployeeManagement/Create",
+                        dataType: "json",
+                        type: "post"
+                    },
+
+                    parameterMap: function (options, operation) {
+                        if (operation !== "read" && options.models) {
+                            return { models: kendo.stringify(options.models) };
+                        }
+                    }
+                },
+
+                batch: true,
+
+                schema: {
+                    model: {
+                        id: "EmployeeId",
+                        fields: {
+                            EmployeeId: { nullable: true, validation: { required: true } },
+                            EmployeeName: { validation: { required: true } },
+                            EmployeePassword: { validation: { required: true } },
+                            EmployeeEmail: { validation: { required: true } },
+                            EmployeePhoneNumber: { validation: { required: true } }
+                        }
+                    }
+                }
+            });
+
+        $("#grid").kendoGrid(
+            {
+                dataSource: ds,
+                toolbar: ["create"],
+                sortable: true,
+                columns: [
+                    {
+                        field: "EmployeeId",
+                        title: "ID",
+                        editable: isEditable,
+                    },
+
+                    {
+                        field: "EmployeeName",
+                        title: "Name",
+                    },
+
+                    {
+                        hidden: true,
+                        field: "EmployeePassword", title: "Password",
+                    },
+
+                    {
+                        field: "EmployeeEmail",
+                        title: "Email",
+                        editor: function (container, options) {
+                            var input = $('<input type="email" data-email-msg="Invalid email!" class="k-input k-textbox k-input-solid k-input-md k-rounded-md" required/>');
+                            input.attr("name", options.field);
+                            input.appendTo(container);
+                        }
+                    },
+
+                    {
+                        field: "EmployeePhoneNumber",
+                        title: "Phone number",
+                        editor: function (container, options) {
+                            //pattern="[(][0-9]{3}[)] [0-9]{3}-[0-9]{4}"
+                            var input = $('<input type="tel" data-phonerule-msg="Invalid Phone Number!" class="k-input k-textbox k-input-solid k-input-md k-rounded-md" required />');
+                            input.attr("name", options.field);
+                            input.kendoMaskedTextBox({
+                                mask: "(999) 000-0000"
+                            });
+                            input.appendTo(container);
+                        }
+                    },
+                    { command: ["edit", "destroy"], title: "Action", width: "250px" }
+                ],
+
+                editable: "inline",
+
+                save: function (e) {
+                    setTimeout(function () {
+                        $("#grid").data("kendoGrid").dataSource.read();
+                    }, 700);
+                    this.hideColumn(2);
+                },
+
+                cancel: function () {
+                    this.hideColumn(2);
+                },
+
+                edit: function () {
+                    this.showColumn(2);
+                },
+            });
+
+    });
+
+    function isEditable(e) {
+        var ds = $("#grid").data("kendoGrid").dataSource;
+        //If the id(EmployeeId) is null, then it is editable.
+        return e.EmployeeId == null;
+    }
+</script>
+

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="EmployeeDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'EmployeeDB.dbo.Employee' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Employee">
+          <Property Name="EmployeeId" Type="int" />
+          <Property Name="EmployeeName" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeePassword" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeEmail" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeePhoneNumber" Type="varchar" MaxLength="15" />
+        </EntityType>-->
+  <EntityContainer Name="EmployeeDBModelStoreContainer" />
+</Schema>
